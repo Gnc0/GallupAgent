@@ -45,7 +45,7 @@ GallupAgent 是一个交互式 AI 助手，基于盖洛普的 34 个天赋主题
 
 1. 克隆仓库：
 ```bash
-git clone <repository-url>
+git clone https://github.com/Gnc0/GallupAgent.git
 cd GallupAgent
 ```
 
@@ -191,18 +191,4 @@ python quick_test.py
 
 ### VS Code 调试
 
-项目包含 VS Code 调试配置：
-- **Gallup Agent (Debug)**: 标准调试模式，启用 justMyCode
-- **Gallup Agent (No Debug)**: 完整调试模式
-
-## 许可证
-
-[你的许可证信息]
-
-## 贡献
-
-欢迎贡献！请随时提交 Pull Request。
-
-## 致谢
-
-基于盖洛普 CliftonStrengths（原名 Clifton StrengthsFinder）评估框架。
+项目包含 VS Code 调试配置。
