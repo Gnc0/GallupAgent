@@ -1,7 +1,9 @@
 # GallupAgent
 
 基于盖洛普 CliftonStrengths（34个天赋主题）的多智能体 AI 助手，通过智能协作提供多视角分析。
+
 在评测kimi2.5、deepseekV3.2、Grok4.1、gemini3 pro、glm-4.7、minimax的时候发现，deepseek的数字泔水非常严重，经常性啰嗦+废话，而且文风极为浮夸；反之，kimi2.5不仅能够实现意图对齐，并且能够帮助用户优化问题，并提供结构化的洞察。
+
 使用了一些顶会的提示词增强技术后，发现llm产出质量显著提升，于是乎开始琢磨能不能通过智能体编排丰富llm的推理轨迹，最终采用了gallup理论，使用34个天赋主题作为llm的软约束，并简单地用minimax agent搓了个agent demo，能够显著缓解单次回复的数字泔水现象。
 
 ## 简介
