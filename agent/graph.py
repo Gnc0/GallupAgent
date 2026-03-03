@@ -120,6 +120,8 @@ def router_node(state: AgentState) -> str:
 
     if command == "CALL_AGENT":
         return "worker_node"
+    elif command == "REJECT":
+        return "reject_node"
     elif command == "FINISH":
         return "finish_node"
     else:
@@ -157,6 +159,27 @@ def finish_node(state: AgentState) -> AgentState:
     return state
 
 
+def reject_node(state: AgentState) -> AgentState:
+    """拒绝节点：处理非问题分析类请求。
+
+    Args:
+        state: 当前状态
+
+    Returns:
+        更新后的状态
+    """
+    control_json = state.get("control_json", {})
+    dsl = control_json.get("dsl", {})
+    
+    # 获取拒绝消息
+    reject_message = dsl.get("input_context", "抱歉，我是一个专注于问题分析的AI助手。请提出您需要分析的问题、困惑或需要建议的情况。")
+    
+    state["final_solution"] = reject_message
+    state["should_continue"] = False
+
+    return state
+
+
 # ==================== Graph Construction ====================
 
 def create_graph() -> StateGraph:
@@ -172,6 +195,7 @@ def create_graph() -> StateGraph:
     graph.add_node("supervisor_node", supervisor_node)
     graph.add_node("worker_node", worker_node)
     graph.add_node("finish_node", finish_node)
+    graph.add_node("reject_node", reject_node)
 
     # 设置入口点
     graph.set_entry_point("supervisor_node")
@@ -182,13 +206,15 @@ def create_graph() -> StateGraph:
         router_node,
         {
             "worker_node": "worker_node",
-            "finish_node": "finish_node"
+            "finish_node": "finish_node",
+            "reject_node": "reject_node"
         }
     )
 
     # 添加循环边（worker完成后回到supervisor）
     graph.add_edge("worker_node", "supervisor_node")
     graph.add_edge("finish_node", END)
+    graph.add_edge("reject_node", END)
 
     return graph
 

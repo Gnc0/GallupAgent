@@ -25,6 +25,26 @@ class GallupAgent:
         # 获取主题选择理由
         reasoning = result.get("user_visible_reasoning", "")
 
+        # 处理REJECT命令 - 非问题分析类请求
+        if command == "REJECT":
+            reject_message = dsl.get("input_context", "抱歉，我是一个专注于问题分析的AI助手。请提出您需要分析的问题、困惑或需要建议的情况。")
+            
+            # 保存REJECT类型的对话记录（使用全局导入的save_conversation）
+            save_conversation(
+                user_input=user_input,
+                response=reject_message,
+                themes=[],
+                reasoning=result.get("reasoning", "非问题分析类请求"),
+                theme_results={},
+                metadata={
+                    "task": result.get("task", ""),
+                    "command": "REJECT",
+                    "num_themes": 0
+                }
+            )
+            
+            return reject_message
+
         if command == "FINISH" or not targets:
             return result.get("reasoning", "感谢您的咨询")
 
