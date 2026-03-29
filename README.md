@@ -29,7 +29,43 @@
 
 在项目目录下启动 `pi`，当用户提问需要分析/建议/思考时，skill 自动触发。也可通过 `/skill:gallup` 手动调用。
 
+## 模型配置
+
+Gallup 技能支持任何 OpenAI 兼容的 API。你可以：
+
+1. **配置自定义 API** - 编辑 `~/.pi/agent/models.json` 添加你的 provider
+2. **设置默认模型** - 在 `~/.pi/agent/settings.json` 中配置
+3. **调用时指定模型** - 在 SKILL.md 中使用 `model` 参数
+
+详细配置指南请参考 [MODEL-CONFIG.md](MODEL-CONFIG.md)
+
+### 当前配置
+
+- **默认 Provider**: `zai`
+- **默认 Model**: `glm-4.7`
+- **API 端点**: `https://open.bigmodel.cn/api/coding/paas/v4`
+
+## 特性
+
+- ✅ 多视角分析 - 从 2-5 个盖洛普天赋主题视角深度分析
+- ✅ Session 持久化 - 所有分析结果保存为 YAML 文件
+- ✅ 灵活配置 - 支持任何 OpenAI 兼容的 API
+- ✅ 并行处理 - Worker agents 并行分析，提升效率
+- ✅ 无 Python 依赖 - 纯 Pi 技能实现
+
 ## 依赖
 
 - [pi](https://github.com/badlogic/pi) coding agent（含 subagent 支持）
 - 无 Python 依赖
+
+## Session 数据
+
+每次分析会在 `sessions/gallup-analysis/` 目录保存：
+
+```
+sessions/gallup-analysis/{timestamp}/
+├── {Theme1}.yaml      # Worker 1 分析
+├── {Theme2}.yaml      # Worker 2 分析
+├── {Theme3}.yaml      # Worker 3 分析
+└── synthesis.yaml     # 最终整合答案
+```

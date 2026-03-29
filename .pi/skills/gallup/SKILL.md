@@ -15,6 +15,24 @@ description: 基于盖洛普34个天赋主题的多智能体分析。当用户�
 
 如果**不适合**，直接正常回复用户，不要启动分析流程。
 
+## 模型配置
+
+在 subagent 调用时，可以通过 `model` 参数指定使用的模型：
+
+```
+subagent({
+  agent: "gallup-worker",
+  model: "zai/glm-4.7",  // 可选：指定模型
+  task: "..."
+})
+```
+
+支持的模型格式：
+- `{provider}/{model-id}` - 如 `zai/glm-4.7`
+- `{model-id}` - 使用默认 provider
+
+如果不指定，将使用 pi 的默认模型（见 `~/.pi/agent/settings.json`）。
+
 ## 渐进式分析流程（适合时执行）
 
 通过脚本 `extract-themes.js` 按需查询主题信息，**禁止一次性读取所有主题数据**。脚本路径：`<skill_dir>/extract-themes.js`
@@ -75,6 +93,7 @@ mkdir -p "<skill_dir>/../sessions/gallup-analysis/$(date +%Y%m%d-%H%M%S)"
 subagent({
   agent: "gallup-worker",
   cwd: "<skill_dir>/../sessions/gallup-analysis/<timestamp>/",
+  model: "zai/glm-4.7",  // 可选：指定模型
   task: "主题名称：{ThemeName}
 
 {脚本输出的该主题完整内容}
@@ -107,6 +126,7 @@ analysis: |
 subagent({
   agent: "gallup-synthesizer",
   cwd: "<skill_dir>/../sessions/gallup-analysis/<timestamp>/",
+  model: "zai/glm-4.7",  // 可选：指定模型
   task: "用户问题：{用户原始问题}
 
 选择的分析视角：{themes列表}
